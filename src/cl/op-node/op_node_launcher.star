@@ -94,7 +94,8 @@ def launch(
         "da-server",
         "da",
         "start", 
-        "--config /usr/local/bin/default.json",
+        "--config",
+        "/usr/local/bin/default.json"
     ]
     dac_ports = {
         constants.HTTP_PORT_ID: ethereum_package_shared_utils.new_port_spec(
@@ -110,7 +111,7 @@ def launch(
         "ports": dac_ports,
         "cmd": dac_cmd,
     }
-    plan.add_service("dac-for-{0}".format(service_name), dac_config)
+    plan.add_service("dac-for-{0}".format(service_name), ServiceConfig(**dac_config))
 
     config = get_beacon_config(
         plan,

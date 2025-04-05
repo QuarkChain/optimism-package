@@ -642,6 +642,8 @@ def default_participant():
 def default_op_contract_deployer_global_deploy_overrides():
     return {
         "faultGameAbsolutePrestate": "",
+        "useSoulGasToken": False,
+        "l2GenesisBlobTimeOffset": ""
     }
 
 
