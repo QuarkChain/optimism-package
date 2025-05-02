@@ -187,28 +187,32 @@ def deploy_contracts(
             "dangerouslyAllowCustomDisputeParameters": True,
             "faultGameAbsolutePrestate": absolute_prestate,
         }
-    
+
     if optimism_args.op_contract_deployer_params.global_deploy_overrides[
         "useSoulGasToken"
     ]:
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
         intent["globalDeployOverrides"]["useSoulGasToken"] = True
-        intent["globalDeployOverrides"]["soulGasTokenBlock"] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
+        intent["globalDeployOverrides"][
+            "soulGasTokenBlock"
+        ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
             "soulGasTokenBlock"
         ]
-        intent["globalDeployOverrides"]["isSoulBackedByNative"] = (
-            optimism_args.op_contract_deployer_params.global_deploy_overrides[
-                "isSoulBackedByNative"
-            ]
-        )
+        intent["globalDeployOverrides"][
+            "isSoulBackedByNative"
+        ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
+            "isSoulBackedByNative"
+        ]
 
     if optimism_args.op_contract_deployer_params.global_deploy_overrides[
         "l2GenesisBlobTimeOffset"
     ]:
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
-        intent["globalDeployOverrides"]["l2GenesisBlobTimeOffset"] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
+        intent["globalDeployOverrides"][
+            "l2GenesisBlobTimeOffset"
+        ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
             "l2GenesisBlobTimeOffset"
         ]
 

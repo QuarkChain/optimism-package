@@ -90,13 +90,7 @@ def launch(
         participant.cl_log_level, global_log_level, VERBOSITY_LEVELS
     )
 
-    dac_cmd = [
-        "da-server",
-        "da",
-        "start", 
-        "--config",
-        "/usr/local/bin/default.json"
-    ]
+    dac_cmd = ["da-server", "da", "start", "--config", "/usr/local/bin/default.json"]
     dac_ports = {
         constants.HTTP_PORT_ID: ethereum_package_shared_utils.new_port_spec(
             8888,
