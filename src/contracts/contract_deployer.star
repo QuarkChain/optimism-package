@@ -19,6 +19,57 @@ CANNED_VALUES = {
 }
 
 
+def _normalize_artifacts_locator(locator):
+    """Transform artifact locator from 'artifact://NAME' format to (name, file_path) pair.
+
+    If the locator doesn't use the artifact:// format, returns (None, original_locator).
+
+    Args:
+        locator: The original artifact locator string
+
+    Returns:
+        tuple: (artifact_name, normalized_locator, mount_point)
+    """
+    if locator and locator.startswith("artifact://"):
+        artifact_name = locator[len("artifact://") :]
+        mount_point = "/{0}".format(artifact_name)
+        return (artifact_name, "file://{0}".format(mount_point), mount_point)
+    return (None, locator, None)
+
+
+def _normalize_artifacts_locators(plan, l1_locator, l2_locator):
+    """Normalize artifact locators with specific mount points.
+
+    Args:
+        plan: The plan object
+        l1_locator: The L1 artifact locator
+        l2_locator: The L2 artifact locator
+
+    Returns:
+        tuple: (l1_artifacts_locator, l2_artifacts_locator, extra_files)
+    """
+    (
+        l1_artifact_name,
+        l1_artifacts_locator,
+        l1_mount_point,
+    ) = _normalize_artifacts_locator(l1_locator)
+    (
+        l2_artifact_name,
+        l2_artifacts_locator,
+        l2_mount_point,
+    ) = _normalize_artifacts_locator(l2_locator)
+
+    extra_files = {}
+    if l1_mount_point:
+        extra_files[l1_mount_point] = plan.get_files_artifact(name=l1_artifact_name)
+    if (
+        l2_mount_point and l2_mount_point not in extra_files
+    ):  # shortcut if both are the same
+        extra_files[l2_mount_point] = plan.get_files_artifact(name=l2_artifact_name)
+
+    return l1_artifacts_locator, l2_artifacts_locator, extra_files
+
+
 def deploy_contracts(
     plan, priv_key, l1_config_env_vars, optimism_args, l1_network, altda_args
 ):
@@ -46,6 +97,17 @@ def deploy_contracts(
                 ),
             ]
         ),
+    )
+
+    # Normalize artifact locators with specific mount points
+    (
+        l1_artifacts_locator,
+        l2_artifacts_locator,
+        contracts_extra_files,
+    ) = _normalize_artifacts_locators(
+        plan,
+        optimism_args.op_contract_deployer_params.l1_artifacts_locator,
+        optimism_args.op_contract_deployer_params.l2_artifacts_locator,
     )
 
     fund_script_artifact = plan.upload_files(
@@ -100,8 +162,8 @@ def deploy_contracts(
 
     intent = {
         "useInterop": optimism_args.interop.enabled,
-        "l1ContractsLocator": optimism_args.op_contract_deployer_params.l1_artifacts_locator,
-        "l2ContractsLocator": optimism_args.op_contract_deployer_params.l2_artifacts_locator,
+        "l1ContractsLocator": l1_artifacts_locator,
+        "l2ContractsLocator": l2_artifacts_locator,
         "superchainRoles": {
             "guardian": read_chain_cmd("l1ProxyAdmin", l2_chain_ids_list[0]),
             "protocolVersionsOwner": read_chain_cmd(
@@ -125,28 +187,32 @@ def deploy_contracts(
             "dangerouslyAllowCustomDisputeParameters": True,
             "faultGameAbsolutePrestate": absolute_prestate,
         }
-    
+
     if optimism_args.op_contract_deployer_params.global_deploy_overrides[
         "useSoulGasToken"
     ]:
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
         intent["globalDeployOverrides"]["useSoulGasToken"] = True
-        intent["globalDeployOverrides"]["soulGasTokenBlock"] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
+        intent["globalDeployOverrides"][
+            "soulGasTokenBlock"
+        ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
             "soulGasTokenBlock"
         ]
-        intent["globalDeployOverrides"]["isSoulBackedByNative"] = (
-            optimism_args.op_contract_deployer_params.global_deploy_overrides[
-                "isSoulBackedByNative"
-            ]
-        )
+        intent["globalDeployOverrides"][
+            "isSoulBackedByNative"
+        ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
+            "isSoulBackedByNative"
+        ]
 
     if optimism_args.op_contract_deployer_params.global_deploy_overrides[
         "l2GenesisBlobTimeOffset"
     ]:
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
-        intent["globalDeployOverrides"]["l2GenesisBlobTimeOffset"] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
+        intent["globalDeployOverrides"][
+            "l2GenesisBlobTimeOffset"
+        ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
             "l2GenesisBlobTimeOffset"
         ]
 
@@ -157,9 +223,9 @@ def deploy_contracts(
             {
                 "deployOverrides": {
                     "l2BlockTime": chain.network_params.seconds_per_slot,
-                    "fundDevAccounts": True
-                    if chain.network_params.fund_dev_accounts
-                    else False,
+                    "fundDevAccounts": (
+                        True if chain.network_params.fund_dev_accounts else False
+                    ),
                 },
                 "baseFeeVaultRecipient": read_chain_cmd(
                     "baseFeeVaultRecipient", chain_id
@@ -260,7 +326,11 @@ def deploy_contracts(
         name="op-deployer-apply",
         description="Apply L2 contract deployments",
         image=optimism_args.op_contract_deployer_params.image,
-        env_vars={"PRIVATE_KEY": str(priv_key)} | l1_config_env_vars,
+        env_vars={
+            "PRIVATE_KEY": str(priv_key),
+            "DEPLOYER_CACHE_DIR": "/var/cache/op-deployer",
+        }
+        | l1_config_env_vars,
         store=[
             StoreSpec(
                 src="/network-data",
@@ -269,7 +339,8 @@ def deploy_contracts(
         ],
         files={
             "/network-data": op_deployer_configure.files_artifacts[0],
-        },
+        }
+        | contracts_extra_files,
         run=" && ".join(apply_cmds),
     )
 

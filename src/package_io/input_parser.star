@@ -141,6 +141,7 @@ def input_parser(plan, input_args):
                     struct(
                         el_type=participant["el_type"],
                         el_image=participant["el_image"],
+                        is_qkc=participant["is_qkc"],
                         el_log_level=participant["el_log_level"],
                         el_extra_env_vars=participant["el_extra_env_vars"],
                         el_extra_labels=participant["el_extra_labels"],
@@ -210,6 +211,11 @@ def input_parser(plan, input_args):
                     isthmus_time_offset=result["network_params"]["isthmus_time_offset"],
                     interop_time_offset=result["network_params"]["interop_time_offset"],
                     fund_dev_accounts=result["network_params"]["fund_dev_accounts"],
+                ),
+                proxyd_params=struct(
+                    image=result["proxyd_params"]["image"],
+                    tag=result["proxyd_params"]["tag"],
+                    extra_params=result["proxyd_params"]["extra_params"],
                 ),
                 batcher_params=struct(
                     image=result["batcher_params"]["image"],
@@ -321,6 +327,9 @@ def parse_network_params(plan, input_args):
         network_params = default_network_params()
         network_params.update(chain.get("network_params", {}))
 
+        proxyd_params = default_proxyd_params()
+        proxyd_params.update(chain.get("proxyd_params", {}))
+
         batcher_params = default_batcher_params()
         batcher_params.update(chain.get("batcher_params", {}))
 
@@ -406,6 +415,7 @@ def parse_network_params(plan, input_args):
         result = {
             "participants": participants,
             "network_params": network_params,
+            "proxyd_params": proxyd_params,
             "batcher_params": batcher_params,
             "challenger_params": challenger_params,
             "proposer_params": proposer_params,
@@ -531,6 +541,7 @@ def default_chains():
         {
             "participants": [default_participant()],
             "network_params": default_network_params(),
+            "proxyd_params": default_proxyd_params(),
             "batcher_params": default_batcher_params(),
             "proposer_params": default_proposer_params(),
             "challenger_params": default_challenger_params(),
@@ -563,6 +574,14 @@ def default_batcher_params():
     }
 
 
+def default_proxyd_params():
+    return {
+        "image": "us-docker.pkg.dev/oplabs-tools-artifacts/images/proxyd",
+        "tag": "v4.14.2",
+        "extra_params": [],
+    }
+
+
 def default_challenger_params():
     return {
         "enabled": True,
@@ -587,6 +606,7 @@ def default_participant():
     return {
         "el_type": "op-geth",
         "el_image": "",
+        "is_qkc": False,
         "el_log_level": "",
         "el_extra_env_vars": {},
         "el_extra_labels": {},
@@ -643,7 +663,7 @@ def default_op_contract_deployer_global_deploy_overrides():
     return {
         "faultGameAbsolutePrestate": "",
         "useSoulGasToken": False,
-        "l2GenesisBlobTimeOffset": ""
+        "l2GenesisBlobTimeOffset": "",
     }
 
 
@@ -658,6 +678,13 @@ def default_op_contract_deployer_params():
 
 def default_ethereum_package_network_params():
     return {
+        "participants": [
+            {
+                "el_type": "geth",
+                "cl_type": "teku",
+                "cl_image": "consensys/teku:25.4.0",
+            }
+        ],
         "network_params": {
             "preset": "minimal",
             "genesis_delay": 5,
@@ -672,7 +699,7 @@ def default_ethereum_package_network_params():
                     }
                 }
             ),
-        }
+        },
     }
 
 
