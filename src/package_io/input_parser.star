@@ -141,6 +141,7 @@ def input_parser(plan, input_args):
                     struct(
                         el_type=participant["el_type"],
                         el_image=participant["el_image"],
+                        is_qkc=participant["is_qkc"],
                         el_log_level=participant["el_log_level"],
                         el_extra_env_vars=participant["el_extra_env_vars"],
                         el_extra_labels=participant["el_extra_labels"],
@@ -605,6 +606,7 @@ def default_participant():
     return {
         "el_type": "op-geth",
         "el_image": "",
+        "is_qkc": False,
         "el_log_level": "",
         "el_extra_env_vars": {},
         "el_extra_labels": {},

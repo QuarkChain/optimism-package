@@ -113,7 +113,6 @@ def test_launch_with_defaults(plan):
             "--safedb.path=/data/op-node/op-node-beacon-data",
             "--altda.enabled={0}".format(da_server_context.enabled),
             "--altda.da-server={0}".format(da_server_context.http_url),
-            "--dac.urls=http://localhost:8888",
             "--metrics.enabled=true",
             "--metrics.addr=0.0.0.0",
             "--metrics.port=9001",
