@@ -78,6 +78,7 @@ PARTICIPANT_CATEGORIES = {
     "participants": [
         "el_type",
         "el_image",
+        "is_qkc",
         "el_log_level",
         "el_extra_env_vars",
         "el_extra_labels",
@@ -102,8 +103,28 @@ PARTICIPANT_CATEGORIES = {
         "cl_max_mem",
         "el_builder_type",
         "el_builder_image",
+        "el_builder_log_level",
+        "el_builder_extra_env_vars",
+        "el_builder_extra_labels",
+        "el_builder_extra_params",
+        "el_builder_tolerations",
+        "el_builder_volume_size",
+        "el_builder_min_cpu",
+        "el_builder_max_cpu",
+        "el_builder_min_mem",
+        "el_builder_max_mem",
         "cl_builder_type",
         "cl_builder_image",
+        "cl_builder_log_level",
+        "cl_builder_extra_env_vars",
+        "cl_builder_extra_labels",
+        "cl_builder_extra_params",
+        "cl_builder_tolerations",
+        "cl_builder_volume_size",
+        "cl_builder_min_cpu",
+        "cl_builder_max_cpu",
+        "cl_builder_min_mem",
+        "cl_builder_max_mem",
         "node_selectors",
         "tolerations",
         "count",
@@ -123,6 +144,7 @@ SUBCATEGORY_PARAMS = {
         "interop_time_offset",
         "fund_dev_accounts",
     ],
+    "proxyd_params": ["image", "tag", "extra_params"],
     "batcher_params": ["image", "extra_params"],
     "proposer_params": ["image", "extra_params", "game_type", "proposal_interval"],
     "challenger_params": [
@@ -135,6 +157,7 @@ SUBCATEGORY_PARAMS = {
     ],
     "mev_params": ["rollup_boost_image", "builder_host", "builder_port"],
     "da_server_params": [
+        "enabled",
         "image",
         "cmd",
     ],
@@ -147,7 +170,13 @@ OP_CONTRACT_DEPLOYER_PARAMS = [
     "global_deploy_overrides",
 ]
 
-OP_CONTRACT_DEPLOYER_GLOBAL_DEPLOY_OVERRIDES = ["faultGameAbsolutePrestate", "useSoulGasToken", "soulGasTokenBlock", "isSoulBackedByNative", "l2GenesisBlobTimeOffset"]
+OP_CONTRACT_DEPLOYER_GLOBAL_DEPLOY_OVERRIDES = [
+    "faultGameAbsolutePrestate",
+    "useSoulGasToken",
+    "soulGasTokenBlock",
+    "isSoulBackedByNative",
+    "l2GenesisBlobTimeOffset",
+]
 
 ADDITIONAL_SERVICES_PARAMS = [
     "blockscout",
