@@ -195,9 +195,9 @@ def deploy_contracts(
             intent["globalDeployOverrides"] = {}
         intent["globalDeployOverrides"]["useSoulGasToken"] = True
         intent["globalDeployOverrides"][
-            "soulGasTokenBlock"
+            "soulGasTokenTimeOffset"
         ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
-            "soulGasTokenBlock"
+            "soulGasTokenTimeOffset"
         ]
         intent["globalDeployOverrides"][
             "isSoulBackedByNative"
