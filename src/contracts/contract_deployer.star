@@ -189,11 +189,11 @@ def deploy_contracts(
         }
 
     if optimism_args.op_contract_deployer_params.global_deploy_overrides[
-        "useSoulGasToken"
+        "deploySoulGasToken"
     ]:
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
-        intent["globalDeployOverrides"]["useSoulGasToken"] = True
+        intent["globalDeployOverrides"]["deploySoulGasToken"] = True
         intent["globalDeployOverrides"][
             "soulGasTokenTimeOffset"
         ] = optimism_args.op_contract_deployer_params.global_deploy_overrides[
