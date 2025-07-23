@@ -172,7 +172,7 @@ OP_CONTRACT_DEPLOYER_PARAMS = [
 
 OP_CONTRACT_DEPLOYER_GLOBAL_DEPLOY_OVERRIDES = [
     "faultGameAbsolutePrestate",
-    "useSoulGasToken",
+    "deploySoulGasToken",
     "soulGasTokenTimeOffset",
     "isSoulBackedByNative",
     "l2GenesisBlobTimeOffset",
