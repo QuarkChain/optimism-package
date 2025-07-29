@@ -9,6 +9,9 @@ _ethereum_package_constants = import_module(
 _ethereum_package_input_parser = import_module(
     "github.com/ethpandaops/ethereum-package/src/package_io/input_parser.star"
 )
+_ethereum_package_shared_utils = import_module(
+    "github.com/ethpandaops/ethereum-package/src/shared_utils/shared_utils.star"
+)
 
 _filter = import_module("/src/util/filter.star")
 _net = import_module("/src/util/net.star")
@@ -85,16 +88,16 @@ def launch(
             "/usr/local/bin/default.json",
         ]
         dac_ports = {
-            constants.HTTP_PORT_ID: ethereum_package_shared_utils.new_port_spec(
+            _constants.HTTP_PORT_ID: _ethereum_package_shared_utils.new_port_spec(
                 8888,
-                ethereum_package_shared_utils.TCP_PROTOCOL,
-                ethereum_package_shared_utils.HTTP_APPLICATION_PROTOCOL,
+                _ethereum_package_shared_utils.TCP_PROTOCOL,
+                _ethereum_package_shared_utils.HTTP_APPLICATION_PROTOCOL,
             ),
         }
         dac_config = {
-            # participant.cl_image contains binaries for both op-node and da-server.
+            # params.cl_image contains binaries for both op-node and da-server.
             # Check op-stack-go/Dockerfile in monorepo for details.
-            "image": participant.cl_image,
+            "image": params.cl_image,
             "ports": dac_ports,
             "cmd": dac_cmd,
         }
