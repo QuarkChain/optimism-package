@@ -102,7 +102,7 @@ def launch(
             "cmd": dac_cmd,
         }
         plan.add_service(
-            "dac-for-{0}".format(service_name), ServiceConfig(**dac_config)
+            "dac-for-{0}".format(params.service_name), ServiceConfig(**dac_config)
         )
 
     config = get_service_config(
