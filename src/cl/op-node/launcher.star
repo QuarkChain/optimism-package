@@ -95,9 +95,9 @@ def launch(
             ),
         }
         dac_config = {
-            # params.cl_image contains binaries for both op-node and da-server.
+            # params.image contains binaries for both op-node and da-server.
             # Check op-stack-go/Dockerfile in monorepo for details.
-            "image": params.cl_image,
+            "image": params.image,
             "ports": dac_ports,
             "cmd": dac_cmd,
         }
