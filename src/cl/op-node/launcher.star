@@ -76,6 +76,32 @@ def launch(
         params.tolerations, [], tolerations
     )
 
+    if params.is_qkc:
+        dac_cmd = [
+            "da-server",
+            "da",
+            "start",
+            "--config",
+            "/usr/local/bin/default.json",
+        ]
+        dac_ports = {
+            constants.HTTP_PORT_ID: ethereum_package_shared_utils.new_port_spec(
+                8888,
+                ethereum_package_shared_utils.TCP_PROTOCOL,
+                ethereum_package_shared_utils.HTTP_APPLICATION_PROTOCOL,
+            ),
+        }
+        dac_config = {
+            # participant.cl_image contains binaries for both op-node and da-server.
+            # Check op-stack-go/Dockerfile in monorepo for details.
+            "image": participant.cl_image,
+            "ports": dac_ports,
+            "cmd": dac_cmd,
+        }
+        plan.add_service(
+            "dac-for-{0}".format(service_name), ServiceConfig(**dac_config)
+        )
+
     config = get_service_config(
         plan=plan,
         params=params,
@@ -191,6 +217,8 @@ def get_service_config(
             else ""
         ),
     ]
+    if params.is_qkc:
+        cmd.append("--dac.urls=http://localhost:8888")
 
     supervisor_params = _filter.first(supervisors_params)
 
