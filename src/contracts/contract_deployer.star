@@ -193,9 +193,7 @@ def deploy_contracts(
             "faultGameAbsolutePrestate": absolute_prestate,
         }
 
-    if optimism_args.op_contract_deployer_params.overrides[
-        "deploySoulGasToken"
-    ]:
+    if optimism_args.op_contract_deployer_params.overrides.get("deploySoulGasToken", False):
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
         intent["globalDeployOverrides"]["deploySoulGasToken"] = True
@@ -210,9 +208,7 @@ def deploy_contracts(
             "isSoulBackedByNative"
         ]
 
-    if optimism_args.op_contract_deployer_params.overrides[
-        "l2GenesisBlobTimeOffset"
-    ]:
+    if optimism_args.op_contract_deployer_params.overrides.get("l2GenesisBlobTimeOffset", False):
         if "globalDeployOverrides" not in intent:
             intent["globalDeployOverrides"] = {}
         intent["globalDeployOverrides"][
