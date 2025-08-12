@@ -46,7 +46,8 @@ def expose_metrics_port(ports, port_id=METRICS_PORT_ID, port_num=METRICS_PORT_NU
     )
 
 
-# configures the CLI flags and ports for a service using the standard op-service setup
+# configures the CLI flags and ports for a service using the standard op-service setup.
+# Note: kona services use identical metrics args.
 def configure_op_service_metrics(cmd, ports):
     cmd += [
         "--metrics.enabled",
@@ -85,6 +86,7 @@ def new_metrics_job(
     }
 
 
+# Note: kona services use identical metrics registration.
 def register_op_service_metrics_job(helper, service, network_name=None):
     register_service_metrics_job(
         helper,
@@ -107,15 +109,18 @@ def register_service_metrics_job(
         "service": service_name,
         "namespace": service_name,
     }
+
+    job_name = service_name
     if network_name != None:
         labels["stack_optimism_io_network"] = network_name
+        job_name += "-" + network_name
 
     labels.update(additional_labels)
 
     add_metrics_job(
         helper,
         new_metrics_job(
-            job_name=service_name,
+            job_name=job_name,
             endpoint=endpoint,
             metrics_path=metrics_path,
             labels=labels,
