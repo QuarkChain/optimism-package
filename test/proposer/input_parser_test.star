@@ -25,7 +25,7 @@ def test_proposer_input_parser_default_args(plan):
     _default_params = struct(
         extra_params=[],
         game_type=1,
-        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-proposer:develop",
+        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-proposer:v1.10.0",
         ports={
             _net.HTTP_PORT_NAME: _net.port(number=8560),
         },
@@ -35,6 +35,7 @@ def test_proposer_input_parser_default_args(plan):
             "op.kind": "proposer",
             "op.network.id": "1000",
         },
+        pprof_enabled=False,
     )
 
     expect.eq(
@@ -97,6 +98,7 @@ def test_proposer_input_parser_custom_params(plan):
                 "op.kind": "proposer",
                 "op.network.id": "1000",
             },
+            pprof_enabled=False,
         ),
     )
 
