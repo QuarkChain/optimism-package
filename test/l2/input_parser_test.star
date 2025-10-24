@@ -60,8 +60,9 @@ def test_l2_input_parser_defaults(plan):
         fund_dev_accounts=True,
         granite_time_offset=0,
         holocene_time_offset=None,
-        interop_time_offset=None,
         isthmus_time_offset=None,
+        jovian_time_offset=None,
+        interop_time_offset=None,
         network="kurtosis",
         network_id=2151908,
         name="network1",
@@ -70,7 +71,7 @@ def test_l2_input_parser_defaults(plan):
 
     _default_batcher_params = struct(
         extra_params=[],
-        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-batcher:develop",
+        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-batcher:v1.14.0",
         ports={
             _net.HTTP_PORT_NAME: _net.port(number=8548),
         },
@@ -79,12 +80,13 @@ def test_l2_input_parser_defaults(plan):
             "op.kind": "batcher",
             "op.network.id": "2151908",
         },
+        pprof_enabled=False,
     )
 
     _default_proposer_params = struct(
         extra_params=[],
         game_type=1,
-        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-proposer:develop",
+        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-proposer:v1.10.0",
         ports={
             _net.HTTP_PORT_NAME: _net.port(number=8560),
         },
@@ -94,6 +96,7 @@ def test_l2_input_parser_defaults(plan):
             "op.kind": "proposer",
             "op.network.id": "2151908",
         },
+        pprof_enabled=False,
     )
 
     _default_proxyd_params = struct(
@@ -108,6 +111,7 @@ def test_l2_input_parser_defaults(plan):
             "op.network.id": "2151908",
         },
         replicas={"node0": "http://op-el-2151908-node0-op-geth:8545"},
+        pprof_enabled=False,
     )
 
     _default_participants = _participant_input_parser.parse(

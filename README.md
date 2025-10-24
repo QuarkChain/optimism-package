@@ -169,7 +169,7 @@ optimism_package:
       superchain: superchain-a
 
       # The Docker image that should be used for the supervisor; leave blank to use the default op-supervisor image
-      image: "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-supervisor:develop"
+      image: "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-supervisor:v0.3.0-dev.4"
 
       # Optional list of CLI arguments that will be passed to the op-supervisor command for modifying its behaviour
       extra_params: []
@@ -204,7 +204,7 @@ optimism_package:
       participants:
         # Nodes are keyed by their name
         node0:
-          # EL(Execution Layer) Specific flags 
+          # EL(Execution Layer) Specific flags
           el:
             # The type of EL client that should be started
             # Valid values are:
@@ -282,7 +282,7 @@ optimism_package:
 
             # The Docker image that should be used for the CL client; leave blank to use the default for the client type
             # Defaults by client:
-            # - op-node: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.13.3
+            # - op-node: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.13.4
             # - hildr: ghcr.io/optimism-java/hildr:latest
             image: ""
 
@@ -353,7 +353,7 @@ optimism_package:
             # Builder secret key used by op-rbuilder to sign transactions
             # Defaults to None - not used
             key: ""
-          
+
           cl_builder:
             # The type of builder CL client that should be started
             # Valid values are:
@@ -363,7 +363,7 @@ optimism_package:
 
             # The Docker image that should be used for the builder CL client; leave blank to use the default for the client type
             # Defaults by client:
-            # - op-node: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.13.3
+            # - op-node: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.13.4
             # - hildr: ghcr.io/optimism-java/hildr:latest
             image: ""
 
@@ -401,6 +401,11 @@ optimism_package:
         # Defaults to None - not activated - decimal value
         # Offset is in seconds
         isthmus_time_offset: ""
+
+        # Jovian fork
+        # Defaults to None - not activated - decimal value
+        # Offset is in seconds
+        jovian_time_offset: ""
 
         # Interop fork
         # Defaults to None - not activated - decimal value
@@ -484,7 +489,7 @@ optimism_package:
         enabled: false
         image: "blockscout/blockscout-optimism:6.8.0"
         verifier_image: "ghcr.io/blockscout/smart-contract-verifier:v1.9.0"
-        
+
 
   challengers:
     my-challenger:

@@ -18,6 +18,7 @@ _DEFAULT_ARGS = {
     "min_mem": 0,
     "max_mem": 0,
     "is_qkc": False,
+    "pprof_enabled": False,
 }
 
 _IMAGE_IDS = {

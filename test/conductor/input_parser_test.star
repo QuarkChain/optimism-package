@@ -50,7 +50,7 @@ def test_conductor_input_parser_default_args_enabled(plan):
     _default_params = struct(
         enabled=True,
         extra_params=[],
-        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-conductor:develop",
+        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-conductor:v0.7.1",
         labels={
             "op.kind": "conductor",
             "op.network.id": "1000",
@@ -67,6 +67,7 @@ def test_conductor_input_parser_default_args_enabled(plan):
         proxy=True,
         paused=False,
         bootstrap=False,
+        pprof_enabled=False,
     )
 
     expect.eq(
@@ -119,6 +120,7 @@ def test_conductor_input_parser_custom_params(plan):
             proxy=True,
             paused=False,
             bootstrap=False,
+            pprof_enabled=False,
         ),
     )
 

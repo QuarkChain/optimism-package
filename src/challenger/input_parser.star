@@ -4,13 +4,14 @@ _id = import_module("/src/util/id.star")
 
 _DEFAULT_ARGS = {
     "enabled": True,
-    "image": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-challenger:develop",
+    "image": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-challenger:v1.5.1",
     "extra_params": [],
     "participants": "*",
     "cannon_prestate_path": "",
     "cannon_prestates_url": "https://storage.googleapis.com/oplabs-network-data/proofs/op-program/cannon",
     "cannon_trace_types": [],
     "datadir": "/data/op-challenger/op-challenger-data",
+    "pprof_enabled": False,
 }
 
 

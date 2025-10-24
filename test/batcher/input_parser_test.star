@@ -23,7 +23,7 @@ def test_batcher_input_parser_extra_attrbutes(plan):
 
 def test_batcher_input_parser_default_args(plan):
     _default_params = struct(
-        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-batcher:develop",
+        image="us-docker.pkg.dev/oplabs-tools-artifacts/images/op-batcher:v1.14.0",
         extra_params=[],
         ports={
             _net.HTTP_PORT_NAME: _net.port(number=8548),
@@ -33,6 +33,7 @@ def test_batcher_input_parser_default_args(plan):
             "op.kind": "batcher",
             "op.network.id": "1000",
         },
+        pprof_enabled=False,
     )
 
     expect.eq(
@@ -89,6 +90,7 @@ def test_batcher_input_parser_custom_params(plan):
                 "op.kind": "batcher",
                 "op.network.id": "1000",
             },
+            pprof_enabled=False,
         ),
     )
 
